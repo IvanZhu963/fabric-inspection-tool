@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美标四分制纺织品验货系统</title>
+    <style>
+        /* 样式保持不变，与之前相同 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            background-color: #fdfdfd;
+        }
+        
+        h2 {
+            margin-bottom: 18px;
+            color: #2c3e50;
+            font-size: 1.3em;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 220px;
+            margin-right: 15px;
+            margin-bottom: 12px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .defect-item {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .defect-select {
+            flex: 3;
+        }
+        
+        .defect-position {
+            flex: 2;
+        }
+        
+        .defect-length {
+            flex: 1;
+        }
+        
+        .defect-point {
+            flex: 1;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d35400;
+        }
+        
+        .calculation-results {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .result-value {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .quality-grade {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px;
+            background-color: #e8f5e9;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid #2ecc71;
+        }
+        
+        .remarks {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        
+        .history-actions {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .report-item {
+            padding: 15px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .report-item:hover {
+            background-color: #edf2f7;
+            border-color: #3498db;
+        }
+        
+        .report-item.selected {
+            background-color: #e1f0fa;
+            border-color: #3498db;
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .report-title {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .report-date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .report-details {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        @media (max-width: 768px) {
+            .form-group {
+                min-width: 100%;
+                margin-right: 0;
+            }
+            
+            .defect-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>美标四分制纺织品验货系统</h1>
+            <div class="subtitle">基于美国纺织品检验标准的质量评估工具</div>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="inspection">验货报告</div>
+            <div class="tab" data-tab="history">历史记录</div>
+        </div>
+        
+        <div class="tab-content active" id="inspection-tab">
+            <div class="form-section">
+                <h2>基本信息</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="orderNo">订单号码/Order No.</label>
+                        <input type="text" id="orderNo" placeholder="输入订单号码">
+                    </div>
+                    <div class="form-group">
+                        <label for="fabricCode">布号/Fabric code</label>
+                        <input type="text" id="fabricCode" placeholder="输入布号">
+                    </div>
+                    <div class="form-group">
+                        <label for="styleNo">款号/Style No.</label>
+                        <input type="text" id="styleNo" placeholder="输入款号">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullWidth">全幅/Full width</label>
+                        <input type="text" id="fullWidth" placeholder="输入全幅">
+                    </div>
+                    <div class="form-group">
+                        <label for="cuttableWidth">有效幅宽/Cuttable Width</label>
+                        <input type="text" id="cuttableWidth" placeholder="输入有效幅宽">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">克重/Weight</label>
+                        <input type="text" id="weight" placeholder="输入克重">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="season">季节/Season</label>
+                        <input type="text" id="season" placeholder="输入季节">
+                    </div>
+                    <div class="form-group">
+                        <label for="content">成分/Content</label>
+                        <input type="text" id="content" placeholder="输入成分">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">日期/Date</label>
+                        <input type="date" id="date">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="orderQty">订单数量/Order QTY</label>
+                        <input type="number" id="orderQty" placeholder="输入订单数量">
+                    </div>
+                    <div class="form-group">
+                        <label for="colorNo">颜色号/Col No.</label>
+                        <input type="text" id="colorNo" placeholder="输入颜色号">
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryQty">出货数量/Delivery QTY</label>
+                        <input type="number" id="deliveryQty" placeholder="输入出货数量">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>卷号信息</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rollNo">卷号/Roll No.</label>
+                        <input type="text" id="rollNo" placeholder="输入卷号">
+                    </div>
+                    <div class="form-group">
+                        <label for="rollYds">码数/YDS</label>
+                        <input type="number" id="rollYds" placeholder="输入码数">
+                    </div>
+                    <div class="form-group">
+                        <label for="inspectionQty">检验数量/Inspection QTY</label>
+                        <input type="number" id="inspectionQty" placeholder="输入检验数量">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>疵点记录</h2>
+                <div id="defects-container">
+                    <!-- 疵点行将在这里动态添加 -->
+                </div>
+                <button id="add-defect" class="btn-primary">添加疵点</button>
+            </div>
+            
+            <div class="calculation-results">
+                <h2>计算结果</h2>
+                <div class="result-item">
+                    <span>全疋分数/Total Points:</span>
+                    <span class="result-value" id="totalPoints">0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>一百平方码分数/Points per 100 sq.yds:</span>
+                    <span class="result-value" id="pointsPer100">0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>全疋等级/Quality Grade:</span>
+                    <span class="result-value">
+                        <span id="qualityGradeText">-</span>
+                        <span id="qualityGrade" class="quality-grade">-</span>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>备注/Remarks</h2>
+                <textarea class="remarks" placeholder="输入备注信息"></textarea>
+            </div>
+            
+            <div class="buttons">
+                <button id="calculate" class="btn-success">计算分数</button>
+                <button id="save" class="btn-primary">保存报告</button>
+                <button id="reset" class="btn-danger">重置表单</button>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="history-tab">
+            <h2>历史记录</h2>
+            <div class="history-actions">
+                <button id="load-selected" class="btn-primary">加载选中报告</button>
+                <button id="merge-selected" class="btn-warning">合并选中报告</button>
+                <button id="delete-selected" class="btn-danger">删除选中报告</button>
+            </div>
+            <div id="history-list">
+                <!-- 历史记录将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 合并报告模态框 -->
+    <div id="merge-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>合并报告</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div id="merge-preview">
+                <!-- 合并预览将在这里显示 -->
+            </div>
+            <div class="buttons" style="margin-top: 20px;">
+                <button id="confirm-merge" class="btn-success">确认合并</button>
+                <button id="cancel-merge" class="btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 疵点代码和名称映射
+        const defectCodes = {
+            'A': '综穿错 HARNESS MISDRAW',
+            'B': '断经 BROKEN ENDS',
+            'C': '断纬 BROKEN PICK',
+            'D': '结头 NEP',
+            'E': '横档 WEFT BAR',
+            'F': '粗纱 COARSE YARN',
+            'G': '纬缩、扭结 WEFT LOOP',
+            'H': '破洞 HOLE',
+            'I': '水渍 WATER MARK',
+            'J': '修痕 MENDING MARK',
+            'K': '跳花 FLOAT',
+            'L': '色纱 FOREIGN FIBRE',
+            'M': '色档 SHADE BAR',
+            'N': '污渍 STAIN',
+            'O': '擦痕 RUB MARK',
+            'P': '松紧经 LOOSE/TIGHT WARP',
+            'Q': '棉点 NAP',
+            'R': '纱头 UNCUT THREAD END',
+            'S': '飞花 FLYING',
+            'T': '星跳、沉纱',
+            'U': '稀密路 WEFT CRACKINESS',
+            'V': '破边TORE SELVAGE',
+            'W': '油经：OIL WARP',
+            'X': '弓纱',
+            'Y': '漏针:MISSING YARN',
+            'Z': '拼匹：SPLICES'
+        };
+
+        // 根据美标四分制自动计算疵点分数
+        function calculateDefectPoint(defectCode, defectLength) {
+            // 如果疵点代号为H（破洞），自动算4分
+            if (defectCode === 'H') {
+                return 4;
+            }
+            
+            // 将长度转换为数字
+            const length = parseFloat(defectLength) || 0;
+            
+            // 根据美标四分制计算分数
+            if (length <= 3) {
+                return 1;
+            } else if (length <= 6) {
+                return 2;
+            } else if (length <= 9) {
+                return 3;
+            } else {
+                return 4;
+            }
+        }
+
+        // 为疵点行绑定事件
+        function bindDefectEvents(defectItem) {
+            const defectSelect = defectItem.querySelector('.defect-select');
+            const defectLength = defectItem.querySelector('.defect-length');
+            const defectPoint = defectItem.querySelector('.defect-point');
+            
+            const updateDefectPoint = () => {
+                const code = defectSelect.value;
+                const length = defectLength.value;
+                
+                if (code) {
+                    const calculatedPoint = calculateDefectPoint(code, length);
+                    defectPoint.value = calculatedPoint;
+                }
+            };
+            
+            defectSelect.addEventListener('change', updateDefectPoint);
+            defectLength.addEventListener('input', updateDefectPoint);
+            
+            // 立即更新一次分数
+            updateDefectPoint();
+        }
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前日期为默认值
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // 初始化疵点选择框并添加第一行
+            addDefectRow();
+            
+            // 设置标签页切换
+            setupTabs();
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 加载历史记录
+            loadHistory();
+        });
+
+        // 设置标签页切换
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有标签的活动状态
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 设置当前标签为活动状态
+                    this.classList.add('active');
+                    
+                    // 隐藏所有内容
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // 显示对应内容
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // 如果是历史记录标签，加载历史记录
+                    if (tabId === 'history') {
+                        loadHistory();
+                    }
+                });
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 添加疵点行
+            document.getElementById('add-defect').addEventListener('click', addDefectRow);
+            
+            // 计算分数
+            document.getElementById('calculate').addEventListener('click', calculatePoints);
+            
+            // 保存报告
+            document.getElementById('save').addEventListener('click', saveReport);
+            
+            // 重置表单
+            document.getElementById('reset').addEventListener('click', resetForm);
+            
+            // 历史记录操作
+            document.getElementById('load-selected').addEventListener('click', loadSelectedReport);
+            document.getElementById('merge-selected').addEventListener('click', mergeSelectedReports);
+            document.getElementById('delete-selected').addEventListener('click', deleteSelectedReports);
+            
+            // 模态框操作
+            document.querySelectorAll('.close, #cancel-merge').forEach(el => {
+                el.addEventListener('click', function() {
+                    document.getElementById('merge-modal').style.display = 'none';
+                });
+            });
+            
+            // 确认合并
+            document.getElementById('confirm-merge').addEventListener('click', confirmMerge);
+            
+            // 点击模态框外部关闭
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('merge-modal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // 添加疵点行
+        function addDefectRow() {
+            const defectsContainer = document.getElementById('defects-container');
+            const newDefectItem = document.createElement('div');
+            newDefectItem.className = 'defect-item';
+            
+            newDefectItem.innerHTML = `
+                <select class="defect-select">
+                    <option value="">选择疵点名称</option>
+                </select>
+                <input type="text" class="defect-position" placeholder="疵点位置">
+                <input type="number" class="defect-length" placeholder="疵点长度(英寸)" min="0" step="0.1">
+                <select class="defect-point">
+                    <option value="1">1分</option>
+                    <option value="2">2分</option>
+                    <option value="3">3分</option>
+                    <option value="4">4分</option>
+                </select>
+                <button class="remove-defect btn-danger">删除</button>
+            `;
+            
+            // 填充疵点选项
+            const select = newDefectItem.querySelector('.defect-select');
+            for (const [code, name] of Object.entries(defectCodes)) {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = `${code}. ${name}`;
+                select.appendChild(option);
+            }
+            
+            defectsContainer.appendChild(newDefectItem);
+            
+            // 为疵点行绑定事件
+            bindDefectEvents(newDefectItem);
+            
+            // 添加删除事件
+            const removeBtn = newDefectItem.querySelector('.remove-defect');
+            removeBtn.addEventListener('click', function() {
+                if (defectsContainer.children.length > 1) {
+                    defectsContainer.removeChild(newDefectItem);
+                } else {
+                    alert('至少需要保留一个疵点行');
+                }
+            });
+        }
+
+        // 计算分数
+        function calculatePoints() {
+            // 获取码数和可裁门幅
+            const rollYds = parseFloat(document.getElementById('rollYds').value) || 0;
+            const cuttableWidth = parseFloat(document.getElementById('cuttableWidth').value) || 0;
+            
+            // 计算总面积（平方码）
+            const areaSqYds = (rollYds * cuttableWidth) / 36;
+            
+            // 计算所有疵点的总分数
+            const defectItems = document.querySelectorAll('.defect-item');
+            let totalPoints = 0;
+            
+            defectItems.forEach(item => {
+                const pointSelect = item.querySelector('.defect-point');
+                const pointValue = parseFloat(pointSelect.value) || 0;
+                totalPoints += pointValue;
+            });
+            
+            // 计算一百平方码分数
+            const pointsPer100 = areaSqYds > 0 ? (totalPoints * 100) / areaSqYds : 0;
+            
+            // 确定品质等级
+            let qualityGrade = '';
+            let qualityText = '';
+            
+            if (pointsPer100 <= 15) {
+                qualityGrade = 'A';
+                qualityText = '一等品';
+            } else if (pointsPer100 <= 20) {
+                qualityGrade = 'B';
+                qualityText = '二等品';
+            } else if (pointsPer100 <= 30) {
+                qualityGrade = 'C';
+                qualityText = '三等品';
+            } else {
+                qualityGrade = 'D';
+                qualityText = '等外品';
+            }
+            
+            // 更新显示结果
+            document.getElementById('totalPoints').textContent = totalPoints.toFixed(2);
+            document.getElementById('pointsPer100').textContent = pointsPer100.toFixed(2);
+            document.getElementById('qualityGrade').textContent = qualityGrade;
+            document.getElementById('qualityGradeText').textContent = qualityText;
+        }
+
+        // 保存报告
+        function saveReport() {
+            // 先计算分数确保数据准确
+            calculatePoints();
+            
+            // 收集表单数据
+            const formData = {
+                orderNo: document.getElementById('orderNo').value,
+                fabricCode: document.getElementById('fabricCode').value,
+                styleNo: document.getElementById('styleNo').value,
+                fullWidth: document.getElementById('fullWidth').value,
+                cuttableWidth: document.getElementById('cuttableWidth').value,
+                weight: document.getElementById('weight').value,
+                season: document.getElementById('season').value,
+                content: document.getElementById('content').value,
+                date: document.getElementById('date').value,
+                orderQty: document.getElementById('orderQty').value,
+                colorNo: document.getElementById('colorNo').value,
+                deliveryQty: document.getElementById('deliveryQty').value,
+                rollNo: document.getElementById('rollNo').value,
+                rollYds: document.getElementById('rollYds').value,
+                inspectionQty: document.getElementById('inspectionQty').value,
+                remarks: document.querySelector('.remarks').value,
+                totalPoints: document.getElementById('totalPoints').textContent,
+                pointsPer100: document.getElementById('pointsPer100').textContent,
+                qualityGrade: document.getElementById('qualityGrade').textContent,
+                qualityGradeText: document.getElementById('qualityGradeText').textContent,
+                defects: []
+            };
+            
+            // 收集疵点数据
+            const defectItems = document.querySelectorAll('.defect-item');
+            defectItems.forEach(item => {
+                const defectSelect = item.querySelector('.defect-select');
+                const defectPosition = item.querySelector('.defect-position');
+                const defectLength = item.querySelector('.defect-length');
+                const defectPoint = item.querySelector('.defect-point');
+                
+                if (defectSelect.value) {
+                    formData.defects.push({
+                        code: defectSelect.value,
+                        name: defectCodes[defectSelect.value],
+                        position: defectPosition.value,
+                        length: defectLength.value,
+                        point: defectPoint.value
+                    });
+                }
+            });
+            
+            // 验证必填字段
+            if (!formData.orderNo || !formData.fabricCode || !formData.rollNo) {
+                alert('请填写订单号、布号和卷号等必填信息');
+                return;
+            }
+            
+            // 生成报告ID和时间戳
+            const reportId = 'report_' + new Date().getTime();
+            const savedAt = new Date().toLocaleString();
+            
+            // 从本地存储获取现有报告
+            let reports = JSON.parse(localStorage.getItem('fabricInspectionReports')) || [];
+            
+            // 添加新报告
+            reports.push({
+                id: reportId,
+                savedAt: savedAt,
+                data: formData
+            });
+            
+            // 保存到本地存储
+            localStorage.setItem('fabricInspectionReports', JSON.stringify(reports));
+            
+            alert('报告保存成功！');
+            
+            // 切换到历史记录标签页
+            document.querySelector('.tab[data-tab="history"]').click();
+        }
+
+        // 重置表单
+        function resetForm() {
+            if (confirm('确定要重置所有数据吗？')) {
+                document.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => {
+                    input.value = '';
+                });
+                
+                document.getElementById('date').valueAsDate = new Date();
+                
+                // 清空疵点行
+                const defectsContainer = document.getElementById('defects-container');
+                defectsContainer.innerHTML = '';
+                
+                // 添加一个空行
+                addDefectRow();
+                
+                // 重置计算结果
+                document.getElementById('totalPoints').textContent = '0.00';
+                document.getElementById('pointsPer100').textContent = '0.00';
+                document.getElementById('qualityGrade').textContent = '-';
+                document.getElementById('qualityGradeText').textContent = '-';
+                
+                document.querySelector('.remarks').value = '';
+            }
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const historyList = document.getElementById('history-list');
+            const reports = JSON.parse(localStorage.getItem('fabricInspectionReports')) || [];
+            
+            if (reports.length === 0) {
+                historyList.innerHTML = '<p>暂无历史记录</p>';
+                return;
+            }
+            
+            // 按时间倒序排列
+            reports.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+            
+            historyList.innerHTML = '';
+            
+            reports.forEach(report => {
+                const reportItem = document.createElement('div');
+                reportItem.className = 'report-item';
+                reportItem.setAttribute('data-id', report.id);
+                
+                reportItem.innerHTML = `
+                    <div class="report-header">
+                        <div class="report-title">${report.data.orderNo} - ${report.data.fabricCode}</div>
+                        <div class="report-date">${report.savedAt}</div>
+                    </div>
+                    <div class="report-details">
+                        <div>款号: ${report.data.styleNo} | 颜色: ${report.data.colorNo} | 卷号: ${report.data.rollNo}</div>
+                        <div>全疋分数: ${report.data.totalPoints} | 一百平方码分数: ${report.data.pointsPer100} | 等级: ${report.data.qualityGrade}</div>
+                    </div>
+                `;
+                
+                // 添加选择功能
+                reportItem.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+                
+                historyList.appendChild(reportItem);
+            });
+        }
+
+        // 加载选中报告
+        function loadSelectedReport() {
+            const selectedReports = document.querySelectorAll('.report-item.selected');
+            
+            if (selectedReports.length === 0) {
+                alert('请先选择一个报告');
+                return;
+            }
+            
+            if (selectedReports.length > 1) {
+                alert('只能选择一个报告进行加载');
+                return;
+            }
+            
+            const reportId = selectedReports[0].getAttribute('data-id');
+            const reports = JSON.parse(localStorage.getItem('fabricInspectionReports')) || [];
+            const report = reports.find(r => r.id === reportId);
+            
+            if (!report) {
+                alert('报告不存在');
+                return;
+            }
+            
+            // 填充表单数据
+            const data = report.data;
+            document.getElementById('orderNo').value = data.orderNo || '';
+            document.getElementById('fabricCode').value = data.fabricCode || '';
+            document.getElementById('styleNo').value = data.styleNo || '';
+            document.getElementById('fullWidth').value = data.fullWidth || '';
+            document.getElementById('cuttableWidth').value = data.cuttableWidth || '';
+            document.getElementById('weight').value = data.weight || '';
+            document.getElementById('season').value = data.season || '';
+            document.getElementById('content').value = data.content || '';
+            document.getElementById('date').value = data.date || '';
+            document.getElementById('orderQty').value = data.orderQty || '';
+            document.getElementById('colorNo').value = data.colorNo || '';
+            document.getElementById('deliveryQty').value = data.deliveryQty || '';
+            document.getElementById('rollNo').value = data.rollNo || '';
+            document.getElementById('rollYds').value = data.rollYds || '';
+            document.getElementById('inspectionQty').value = data.inspectionQty || '';
+            document.querySelector('.remarks').value = data.remarks || '';
+            
+            // 清空疵点行
+            const defectsContainer = document.getElementById('defects-container');
+            defectsContainer.innerHTML = '';
+            
+            // 添加疵点行
+            if (data.defects && data.defects.length > 0) {
+                data.defects.forEach(defect => {
+                    addDefectRow();
+                    const lastDefectItem = defectsContainer.lastChild;
+                    const defectSelect = lastDefectItem.querySelector('.defect-select');
+                    const defectPosition = lastDefectItem.querySelector('.defect-position');
+                    const defectLength = lastDefectItem.querySelector('.defect-length');
+                    const defectPoint = lastDefectItem.querySelector('.defect-point');
+                    
+                    defectSelect.value = defect.code;
+                    defectPosition.value = defect.position || '';
+                    defectLength.value = defect.length || '';
+                    defectPoint.value = defect.point || '1';
+                });
+            } else {
+                addDefectRow();
+            }
+            
+            // 更新计算结果
+            document.getElementById('totalPoints').textContent = data.totalPoints || '0.00';
+            document.getElementById('pointsPer100').textContent = data.pointsPer100 || '0.00';
+            document.getElementById('qualityGrade').textContent = data.qualityGrade || '-';
+            document.getElementById('qualityGradeText').textContent = data.qualityGradeText || '-';
+            
+            // 切换到验货报告标签页
+            document.querySelector('.tab[data-tab="inspection"]').click();
+            
+            alert('报告加载成功！');
+        }
+
+        // 合并选中报告
+        function mergeSelectedReports() {
+            const selectedReports = document.querySelectorAll('.report-item.selected');
+            
+            if (selectedReports.length < 2) {
+                alert('请至少选择两个报告进行合并');
+                return;
+            }
+            
+            const reportIds = Array.from(selectedReports).map(item => item.getAttribute('data-id'));
+            const reports = JSON.parse(localStorage.getItem('fabricInspectionReports')) || [];
+            const selectedReportData = reports.filter(r => reportIds.includes(r.id));
+            
+            // 生成合并预览
+            const mergePreview = document.getElementById('merge-preview');
+            mergePreview.innerHTML = `
+                <h4>将合并以下报告：</h4>
+                <ul>
+                    ${selectedReportData.map(report => `
+                        <li>${report.data.orderNo} - ${report.data.fabricCode} (${report.savedAt})</li>
+                    `).join('')}
+                </ul>
+                <p>合并后将创建一个新的报告，包含所有选中报告的疵点数据。</p>
+            `;
+            
+            // 显示模态框
+            document.getElementById('merge-modal').style.display = 'flex';
+        }
+
+        // 确认合并
+        function confirmMerge() {
+            const selectedReports = document.querySelectorAll('.report-item.selected');
+            const reportIds = Array.from(selectedReports).map(item => item.getAttribute('data-id'));
+            const reports = JSON.parse(localStorage.getItem('fabricInspectionReports')) || [];
+            const selectedReportData = reports.filter(r => reportIds.includes(r.id));
+            
+            // 合并报告数据
+            const mergedData = {
+                orderNo: selectedReportData[0].data.orderNo + ' (合并)',
+                fabricCode: selectedReportData[0].data.fabricCode,
+                styleNo: selectedReportData[0].data.styleNo,
+                fullWidth: selectedReportData[0].data.fullWidth,
+                cuttableWidth: selectedReportData[0].data.cuttableWidth,
+                weight: selectedReportData[0].data.weight,
+                season: selectedReportData[0].data.season,
+                content: selectedReportData[0].data.content,
+                date: new Date().toISOString().split('T')[0],
+                orderQty: selectedReportData.reduce((sum, report) => sum + (parseFloat(report.data.orderQty) || 0), 0),
+                colorNo: selectedReportData[0].data.colorNo,
+                deliveryQty: selectedReportData.reduce((sum, report) => sum + (parseFloat(report.data.deliveryQty) || 0), 0),
+                rollNo: '合并卷',
+                rollYds: selectedReportData.reduce((sum, report) => sum + (parseFloat(report.data.rollYds) || 0), 0),
+                inspectionQty: selectedReportData.reduce((sum, report) => sum + (parseFloat(report.data.inspectionQty) || 0), 0),
+                remarks: `由 ${selectedReportData.length} 个报告合并生成\n${selectedReportData.map(r => `${r.data.orderNo} (${r.savedAt})`).join('\n')}`,
+                defects: []
+            };
+            
+            // 合并所有疵点
+            selectedReportData.forEach(report => {
+                if (report.data.defects) {
+                    mergedData.defects = mergedData.defects.concat(report.data.defects);
+                }
+            });
+            
+            // 计算合并后的分数
+            const totalPoints = mergedData.defects.reduce((sum, defect) => sum + (parseFloat(defect.point) || 0), 0);
+            const areaSqYds = (mergedData.rollYds * mergedData.cuttableWidth) / 36;
+            const pointsPer100 = areaSqYds > 0 ? (totalPoints * 100) / areaSqYds : 0;
+            
+            // 确定品质等级
+            let qualityGrade = '';
+            let qualityGradeText = '';
+            
+            if (pointsPer100 <= 15) {
+                qualityGrade = 'A';
+                qualityGradeText = '一等品';
+            } else if (pointsPer100 <= 20) {
+                qualityGrade = 'B';
+                qualityGradeText = '二等品';
+            } else if (pointsPer100 <= 30) {
+                qualityGrade = 'C';
+                qualityGradeText = '三等品';
+            } else {
+                qualityGrade = 'D';
+                qualityGradeText = '等外品';
+            }
+            
+            mergedData.totalPoints = totalPoints.toFixed(2);
+            mergedData.pointsPer100 = pointsPer100.toFixed(2);
+            mergedData.qualityGrade = qualityGrade;
+            mergedData.qualityGradeText = qualityGradeText;
+            
+            // 生成新报告ID和时间戳
+            const reportId = 'report_' + new Date().getTime();
+            const savedAt = new Date().toLocaleString();
+            
+            // 添加新报告到本地存储
+            reports.push({
+                id: reportId,
+                savedAt: savedAt,
+                data: mergedData
+            });
+            
+            localStorage.setItem('fabricInspectionReports', JSON.stringify(reports));
+            
+            // 关闭模态框
+            document.getElementById('merge-modal').style.display = 'none';
+            
+            // 重新加载历史记录
+            loadHistory();
+            
+            alert(`成功合并 ${selectedReportData.length} 个报告！`);
+        }
+
+        // 删除选中报告
+        function deleteSelectedReports() {
+            const selectedReports = document.querySelectorAll('.report-item.selected');
+            
+            if (selectedReports.length === 0) {
+                alert('请先选择要删除的报告');
+                return;
+            }
+            
+            if (!confirm(`确定要删除选中的 ${selectedReports.length} 个报告吗？此操作不可撤销。`)) {
+                return;
+            }
+            
+            const reportIds = Array.from(selectedReports).map(item => item.getAttribute('data-id'));
+            let reports = JSON.parse(localStorage.getItem('fabricInspectionReports')) || [];
+            
+            // 过滤掉选中的报告
+            reports = reports.filter(r => !reportIds.includes(r.id));
+            
+            // 保存回本地存储
+            localStorage.setItem('fabricInspectionReports', JSON.stringify(reports));
+            
+            // 重新加载历史记录
+            loadHistory();
+            
+            alert(`成功删除 ${selectedReports.length} 个报告！`);
+        }
+    </script>
+</body>
+</html>
